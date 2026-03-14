@@ -50,8 +50,15 @@ set(TESTDATA_OUTPUT_NAME_GRAPPA "simulated_MR_2D_cartesian_Grappa2.h5")
 add_library(MR_TESTS_CPP_AUXILIARY ${CMAKE_CURRENT_SOURCE_DIR}/mrtest_auxiliary_funs.cpp)
 target_link_libraries(MR_TESTS_CPP_AUXILIARY PUBLIC csirf cgadgetron)
 
+set(MR_GADGETRON_TEST_LINK_LIBS MR_TESTS_CPP_AUXILIARY csirf cgadgetron)
+if (TARGET cstir)
+  # Mirror the PET/STIR test executables: with static STIR archives, the
+  # final executable needs the STIR closure explicitly on its link line.
+  list(APPEND MR_GADGETRON_TEST_LINK_LIBS cstir ${STIR_LIBRARIES})
+endif()
+
 add_executable(MR_PROCESS_TESTDATA ${CMAKE_CURRENT_SOURCE_DIR}/mrtests_prep_testdata.cpp)
-target_link_libraries(MR_PROCESS_TESTDATA PUBLIC MR_TESTS_CPP_AUXILIARY csirf cgadgetron)
+target_link_libraries(MR_PROCESS_TESTDATA PUBLIC ${MR_GADGETRON_TEST_LINK_LIBS})
 
 if(RUN_ISMRMRD_SHEPP_LOGAN)
   if(EXE_ISMRMRD_SL)
@@ -174,7 +181,7 @@ endif()
 add_executable(MR_TESTS_CPLUSPLUS ${CMAKE_CURRENT_SOURCE_DIR}/mrtests.cpp)
 add_dependencies(MR_TESTS_CPLUSPLUS GENERATE_SIMULATED_TESTDATA)
 
-target_link_libraries(MR_TESTS_CPLUSPLUS PUBLIC MR_TESTS_CPP_AUXILIARY csirf cgadgetron)
+target_link_libraries(MR_TESTS_CPLUSPLUS PUBLIC ${MR_GADGETRON_TEST_LINK_LIBS})
 INSTALL(TARGETS MR_TESTS_CPLUSPLUS DESTINATION bin)
 
 
@@ -197,4 +204,3 @@ endif()
 ADD_TEST(NAME MR_TESTS_CPLUSPLUS
          COMMAND MR_TESTS_CPLUSPLUS "${FILENAME_CARTESIAN_TESTDATA}" "${FILENAME_RPE_TESTDATA}"
          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-
