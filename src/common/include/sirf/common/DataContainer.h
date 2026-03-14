@@ -118,7 +118,11 @@ which rely on the same features of the items.
 		{
 			return false;
 		}
-		virtual bool supports_cuda_array_view() const;
+		virtual bool supports_cuda_array_view() const
+		{
+			return this->supports_array_view() &&
+				pointer_supports_cuda_array_view(reinterpret_cast<const void*>(this->address()));
+		}
 		virtual size_t address() const
 		{
 			THROW("data address defined only for contiguous data in memory");
