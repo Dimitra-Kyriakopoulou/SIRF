@@ -1,8 +1,7 @@
 /*
 SyneRBI Synergistic Image Reconstruction Framework (SIRF)
 Copyright 2015 - 2019, 2021, 2023 Rutherford Appleton Laboratory STFC
-Copyright 2024, 2026 University College London
-Copyright 2026 Biomedical Research Foundation, Academy of Athens
+Copyright 2024 University College London
 
 This is software developed for the Collaborative Computational
 Project in Synergistic Reconstruction for Biomedical Imaging (formerly CCP PETMR)
@@ -26,7 +25,6 @@ limitations under the License.
 #include<complex>
 #include <map>
 #include "sirf/iUtilities/DataHandle.h"
-#include "sirf/common/utilities.h"
 
 namespace sirf {
 
@@ -118,11 +116,7 @@ which rely on the same features of the items.
 		{
 			return false;
 		}
-		virtual bool supports_cuda_array_view() const
-		{
-			return this->supports_array_view() &&
-				pointer_supports_cuda_array_view(reinterpret_cast<const void*>(this->address()));
-		}
+		virtual bool supports_cuda_array_view() const;
 		virtual size_t address() const
 		{
 			THROW("data address defined only for contiguous data in memory");
