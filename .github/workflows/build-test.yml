@@ -2,7 +2,7 @@ name: Build-test CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, Hackathon_project8_II_test ]
     paths-ignore:
     - '**.md'
     - LICENSE.txt
@@ -10,7 +10,7 @@ on:
     - .mailmap
     - CITATION.cff
   pull_request:
-    branches: [ master ]
+    branches: [ master, Hackathon_project8_II_test ]
     paths-ignore:
     - '**.md'
     - LICENSE.txt
